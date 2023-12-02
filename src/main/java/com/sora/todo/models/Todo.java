@@ -8,10 +8,10 @@ public class Todo {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
-    Todo() {
+    public Todo() {
     }
 
-    Todo(String todo) {
+    public Todo(String todo) {
         this.todo = todo;
         this.createdDate = LocalDateTime.now();
         this.updatedDate = LocalDateTime.now();
