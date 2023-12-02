@@ -2,8 +2,23 @@ package com.sora.todo.models;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "todos")
 public class Todo {
+    @Id
+    @Column(name = "id", unique = true, nullable = false)
+    @SequenceGenerator(name = "seq-gen", sequenceName = "id", initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "seq-gen")
     private Integer id;
+
     private String todo;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
