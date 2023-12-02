@@ -17,6 +17,14 @@ public class Todo {
         this.updatedDate = LocalDateTime.now();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getTodo() {
         return todo;
     }
