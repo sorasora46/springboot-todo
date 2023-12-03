@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TodoController {
 
     @Autowired
-    TodoService todoService;
+    private TodoService todoService;
 
     @GetMapping(value = "/")
     public List<Todo> getAllTodos() {
