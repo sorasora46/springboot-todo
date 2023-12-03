@@ -32,6 +32,11 @@ public class Todo {
         this.updatedDate = LocalDateTime.now();
     }
 
+    public Todo(Integer id, String todo) {
+        this(todo);
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
