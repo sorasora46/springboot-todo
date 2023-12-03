@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sora.todo.models.Todo;
+import com.sora.todo.pojos.requests.CreateTodoPayload;
+import com.sora.todo.pojos.requests.UpdateTodoPayload;
 import com.sora.todo.repositories.TodoRepository;
 
 @Service
@@ -23,20 +25,20 @@ public class TodoService {
         return todoRepository.findById(id);
     }
 
-    public Integer createTodo(String todo) {
-        var newTodo = new Todo(todo);
+    public Integer createTodo(CreateTodoPayload payload) {
+        var newTodo = new Todo(payload.getTodo());
         Todo result = todoRepository.save(newTodo);
 
         return result.getId();
     }
 
-    public Boolean updateTodo(Integer id, String update) {
+    public Boolean updateTodo(Integer id, UpdateTodoPayload payload) {
         Boolean isTodoExist = todoRepository.existsById(id);
 
         if (!isTodoExist)
             return false;
 
-        Todo updatedTodo = new Todo(id, update);
+        Todo updatedTodo = new Todo(id, payload.getUpdate());
 
         todoRepository.save(updatedTodo);
 

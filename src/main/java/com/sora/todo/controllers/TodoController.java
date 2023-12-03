@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sora.todo.models.Todo;
+import com.sora.todo.pojos.requests.CreateTodoPayload;
+import com.sora.todo.pojos.requests.UpdateTodoPayload;
 import com.sora.todo.pojos.responses.AllTodosData;
 import com.sora.todo.pojos.responses.CreateTodoData;
 import com.sora.todo.pojos.responses.DeleteTodoData;
@@ -63,8 +65,8 @@ public class TodoController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Response<CreateTodoData>> createTodo(@RequestBody String todo) {
-        Integer id = todoService.createTodo(todo);
+    public ResponseEntity<Response<CreateTodoData>> createTodo(@RequestBody CreateTodoPayload payload) {
+        Integer id = todoService.createTodo(payload);
 
         Response<CreateTodoData> response = new Response<>(true, new CreateTodoData(id), HttpStatus.CREATED);
         HttpStatus httpStatus = response.getHttpStatus();
@@ -73,8 +75,9 @@ public class TodoController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Response<UpdateTodoData>> updateTodo(@PathVariable Integer id, @RequestBody String update) {
-        Boolean isUpdated = todoService.updateTodo(id, update);
+    public ResponseEntity<Response<UpdateTodoData>> updateTodo(@PathVariable Integer id,
+            @RequestBody UpdateTodoPayload payload) {
+        Boolean isUpdated = todoService.updateTodo(id, payload);
         String message = isUpdated ? "UPDATE SUCCESS" : "UPDATE FAIL";
 
         Response<UpdateTodoData> response = new Response<>(isUpdated, new UpdateTodoData(message));
