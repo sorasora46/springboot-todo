@@ -27,11 +27,15 @@ public class TodoService {
         return result.getId();
     }
 
-    public Boolean updateTodo(Integer id) {
+    public Boolean updateTodo(Integer id, String update) {
         Boolean isTodoExist = todoRepository.existsById(id);
 
         if (!isTodoExist)
             return false;
+
+        Todo updatedTodo = new Todo(id, update);
+
+        todoRepository.save(updatedTodo);
 
         return true;
     }
