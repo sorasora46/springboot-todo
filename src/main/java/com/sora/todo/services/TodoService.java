@@ -1,5 +1,6 @@
 package com.sora.todo.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,14 +34,16 @@ public class TodoService {
     }
 
     public Boolean updateTodo(Integer id, UpdateTodoPayload payload) {
-        Boolean isTodoExist = todoRepository.existsById(id);
-
-        if (!isTodoExist)
+        Optional<Todo> oldTodo = todoRepository.findById(id);
+        if (!oldTodo.isPresent())
             return false;
 
-        Todo updatedTodo = new Todo(id, payload.getUpdate());
+        var todo = oldTodo.get();
 
-        todoRepository.save(updatedTodo);
+        todo.setTodo(payload.getUpdate());
+        todo.setUpdatedDate(LocalDateTime.now());
+
+        todoRepository.save(todo);
 
         return true;
     }
