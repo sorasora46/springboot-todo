@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sora.todo.exceptions.TodoException;
 import com.sora.todo.models.Todo;
 import com.sora.todo.pojos.requests.CreateTodoPayload;
 import com.sora.todo.pojos.requests.UpdateTodoPayload;
@@ -57,11 +58,13 @@ public class TodoController {
 
             return new ResponseEntity<>(response, httpStatus);
         }
+        throw new TodoException(id + " NOT FOUND", HttpStatus.NOT_FOUND);
 
-        Response<TodoNotFound> response = new Response<>(false, new TodoNotFound(id), HttpStatus.NOT_FOUND);
-        HttpStatus httpStatus = response.getHttpStatus();
+        // Response<TodoNotFound> response = new Response<>(false, new TodoNotFound(id),
+        // HttpStatus.NOT_FOUND);
+        // HttpStatus httpStatus = response.getHttpStatus();
 
-        return new ResponseEntity<>(response, httpStatus);
+        // return new ResponseEntity<>(response, httpStatus);
     }
 
     @PostMapping(value = "/create")
