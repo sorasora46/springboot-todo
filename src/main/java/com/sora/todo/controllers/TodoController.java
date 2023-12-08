@@ -22,7 +22,6 @@ import com.sora.todo.pojos.responses.DeleteTodoData;
 import com.sora.todo.pojos.responses.Response;
 import com.sora.todo.pojos.responses.ResponseData;
 import com.sora.todo.pojos.responses.TodoByIdData;
-import com.sora.todo.pojos.responses.TodoNotFound;
 import com.sora.todo.pojos.responses.UpdateTodoData;
 import com.sora.todo.services.TodoService;
 
@@ -51,20 +50,14 @@ public class TodoController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Response<? extends ResponseData>> getTodoById(@PathVariable Integer id) {
         Optional<Todo> todo = todoService.getTodoById(id);
-        if (todo.isPresent()) {
-            TodoByIdData todoByIdData = new TodoByIdData(todo.get());
-            Response<TodoByIdData> response = new Response<>(todoByIdData);
-            HttpStatus httpStatus = response.getHttpStatus();
+        if (!todo.isPresent())
+            throw new TodoException(id + " NOT FOUND", HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(response, httpStatus);
-        }
-        throw new TodoException(id + " NOT FOUND", HttpStatus.NOT_FOUND);
+        TodoByIdData todoByIdData = new TodoByIdData(todo.get());
+        Response<TodoByIdData> response = new Response<>(todoByIdData);
+        HttpStatus httpStatus = response.getHttpStatus();
 
-        // Response<TodoNotFound> response = new Response<>(false, new TodoNotFound(id),
-        // HttpStatus.NOT_FOUND);
-        // HttpStatus httpStatus = response.getHttpStatus();
-
-        // return new ResponseEntity<>(response, httpStatus);
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     @PostMapping(value = "/create")
@@ -83,6 +76,9 @@ public class TodoController {
         Boolean isUpdated = todoService.updateTodo(id, payload);
         String message = isUpdated ? "UPDATE SUCCESS" : "UPDATE FAIL";
 
+        if (!isUpdated)
+            throw new TodoException(message + ": " + id + " NOT FOUND", HttpStatus.NOT_FOUND);
+
         Response<UpdateTodoData> response = new Response<>(isUpdated, new UpdateTodoData(message));
         HttpStatus httpStatus = response.getHttpStatus();
 
@@ -93,6 +89,9 @@ public class TodoController {
     public ResponseEntity<Response<DeleteTodoData>> deleteTodo(@PathVariable Integer id) {
         Boolean isDeleted = todoService.deleteTodo(id);
         String message = isDeleted ? "DELETE SUCCESS" : "DELETE FAIL";
+
+        if (!isDeleted)
+            throw new TodoException(message + ": " + id + " NOT FOUND", HttpStatus.NOT_FOUND);
 
         Response<DeleteTodoData> response = new Response<>(isDeleted, new DeleteTodoData(message));
         HttpStatus httpStatus = response.getHttpStatus();
